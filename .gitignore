@@ -243,3 +243,4 @@ ModelManifest.xml
 
 # Environemnt Variables
 env.config.json
+/env.config.json
