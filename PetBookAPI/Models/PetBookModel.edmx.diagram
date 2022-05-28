@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="718ed754b9884b03b8bb2deb267bc17b" Name="Diagram1" ZoomLevel="83">
+        <EntityTypeShape EntityType="PetBookModel.account_credential" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.account_type" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.address_details" Width="1.5" PointX="0.75" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.allergen" Width="1.5" PointX="11.25" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.clinic_profile" Width="1.5" PointX="3" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.clinic_review" Width="1.5" PointX="10.5" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.file_types" Width="1.5" PointX="6" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.full_names" Width="1.5" PointX="0.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.media_files" Width="1.5" PointX="8.25" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.medical_record" Width="1.5" PointX="13.5" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.mobile_numbers" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.owner_profile" Width="1.5" PointX="6" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.pet_profile" Width="1.5" PointX="8.25" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.post_media_files" Width="1.5" PointX="18.75" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.profile_picture" Width="1.5" PointX="10.5" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.profile_post" Width="1.5" PointX="13.5" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.profile_post_comment" Width="1.5" PointX="15.75" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.profile_post_like" Width="1.5" PointX="15.75" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.sysdiagram" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.vaccine_names" Width="1.5" PointX="13.5" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.vaccine_types" Width="1.5" PointX="13.5" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.contact_numbers" Width="1.5" PointX="11.25" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.login_sessions" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.pet_antiparasitic" Width="1.5" PointX="15.75" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.pet_color" Width="1.5" PointX="10.5" PointY="19" IsExpanded="true" />
+        <EntityTypeShape EntityType="PetBookModel.pet_vaccines" Width="1.5" PointX="15.75" PointY="6" IsExpanded="true" />
+        <AssociationConnector Association="PetBookModel.FK_account_credential_account_type" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_login_sessions_account_credential" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_clinic_profile_address_details" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_owner_profile_address_details" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_clinic_profile_full_names" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_clinic_profile_profile_picture" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_clinic_review_clinic_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_contact_numbers_clinic_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_profile_post_clinic_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_clinic_review_pet_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_media_files_file_types" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_owner_profile_full_names" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_post_media_files_media_files" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_profile_picture_media_files" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_medical_record_pet_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_pet_antiparasitic_medical_record" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_pet_vaccines_medical_record" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_contact_numbers_owner_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_pet_profile_owner_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_pet_color_pet_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_profile_picture_pet_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_profile_post_pet_profile" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_post_media_files_profile_post" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_profile_post_comment_profile_post" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_profile_post_like_profile_post" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_pet_vaccines_vaccine_names" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.FK_pet_vaccines_vaccine_types" ManuallyRouted="false" />
+        <AssociationConnector Association="PetBookModel.pet_allergies" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
