@@ -242,5 +242,5 @@ ModelManifest.xml
 .fake/
 
 # Environemnt Variables
-env.config.json
-/env.config.json
+./PetBookAPI/env.config.json
+./env.config.json
