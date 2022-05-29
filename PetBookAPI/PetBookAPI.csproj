@@ -180,9 +180,9 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AuthController.cs" />
-    <Compile Include="Controllers\SignupController.cs" />
+    <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Extras\Environment.cs" />
+    <Compile Include="Extras\Expiration.cs" />
     <Compile Include="Extras\PasswordManager.cs" />
     <Compile Include="Extras\Session.cs" />
     <Compile Include="Extras\UID.cs" />
@@ -195,6 +195,7 @@
     <Compile Include="Models\login_sessions.cs">
       <DependentUpon>PetBookApiModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Micro\LoginModel.cs" />
     <Compile Include="Models\PetBookApiModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
