@@ -13,7 +13,7 @@ namespace PetBookAPI.Extras
         {
             Size = (byte)size;
         }
-        public async Task<string> Generate()
+        public async Task<string> GenerateIdAsync()
         {
             
             string s = await Task.Run(() =>

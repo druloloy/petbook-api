@@ -9,7 +9,7 @@ namespace PetBookAPI.Extras
     public static class PasswordManager
     {
         private static int cost = 16;
-        public static async Task<string> Hash(string password)
+        public static async Task<string> HashAsync(string password)
         {
 
             string s = await Task.Run(() => {
@@ -18,9 +18,9 @@ namespace PetBookAPI.Extras
             });
             return s;
         }
-        public static bool isMatched(string input, string dbPassword)
+        public static async Task<bool> IsMatchedAsync(string input, string dbPassword)
         {
-            return BCrypt.Net.BCrypt.Verify(input, dbPassword);
+            return await Task.Run(() => BCrypt.Net.BCrypt.Verify(input, dbPassword) );
         }
     }
 }
