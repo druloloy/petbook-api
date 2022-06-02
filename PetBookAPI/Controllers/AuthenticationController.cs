@@ -1,5 +1,10 @@
-﻿using PetBookAPI.Extras;
+﻿using Microsoft.IdentityModel.Tokens;
+using PetBookAPI.Extras;
+using PetBookAPI.Extras.Extensions.HttpRequestHeaders;
+using PetBookAPI.Extras.Extensions.JwtSecurity;
+using PetBookAPI.Extras.Extensions.JwtSecurityTokenExtensions;
 using PetBookAPI.Models;
+using PetBookAPI.Models.Body;
 using PetBookAPI.Models.Micro;
 using System;
 using System.Collections.Generic;
@@ -12,6 +17,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -19,6 +25,7 @@ namespace PetBookAPI.Controllers
 {
     public class AuthenticationController : ApiController
     {
+        [AllowAnonymous]
         [HttpPost]
         [Route("auth/signup")]
         public async Task<IHttpActionResult> CreateAccount(account_credential newAcc)
@@ -113,6 +120,7 @@ namespace PetBookAPI.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("auth/login")]
         public async Task<IHttpActionResult> Login(LoginModel userLogin)
@@ -156,7 +164,6 @@ namespace PetBookAPI.Controllers
                     user.login_sessions.Add(loginSession);
                     await db.SaveChangesAsync();
 
-                    var headers = Request.Headers;
                     var response = Request.CreateResponse(HttpStatusCode.OK, new
                     {
                         userId = user.Id,
@@ -182,6 +189,100 @@ namespace PetBookAPI.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.StackTrace);
+                return InternalServerError();
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("auth/logout")]
+        public IHttpActionResult Logout()
+        {
+            try
+            {
+                var headers = Request.Headers;
+                if (!headers.HasSessionTokenHeader())
+                    return Ok("Where is your session header?"); // return anyway
+
+                JwtToken token = new JwtToken(headers.GetSessionToken(), 
+                                                new Session().CreateValidationParameters());
+
+                if (token == null)
+                    return Ok("Invalid session."); // logout anyway
+
+                PayloadModel payload = token.GetPayload();
+
+                // delete session token if exists
+                using(MainDbEntities db = new MainDbEntities())
+                {
+                    // get session from db
+                    login_sessions activeSession = db.login_sessions
+                                           .Single(s => s.Token.Equals(token.Value));
+                    if (activeSession == null)
+                        return Ok("Session not found in database.");
+
+                    db.login_sessions.Remove(activeSession);
+                    db.SaveChanges();
+                }
+                return Ok("If you reached here, your session is now removed from the database.");
+            }
+            catch (Exception)
+            {
+                return Ok("Your session is either invalid or something went wrong in our server.");
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("auth/refresh")]
+        public async Task<IHttpActionResult> GetAccessToken()
+        {
+            try
+            {
+                var headers = Request.Headers;
+                // check if session header exists
+                if (!headers.HasSessionTokenHeader())
+                    return Content(HttpStatusCode.Forbidden, "You have no right for this request.");
+                // check if session is valid
+                JwtToken token = new JwtToken(headers.GetSessionToken(),
+                                        new Session().CreateValidationParameters());
+                if (token == null)
+                    return Content(HttpStatusCode.Forbidden, "Invalid session token.");
+                // check if session is in database
+                using(MainDbEntities db = new MainDbEntities())
+                {
+                    var session = db.login_sessions
+                                    .Where(s => s.Token.Equals(token.Value))
+                                    .First();
+
+                    if (session==null)
+                        return Content(HttpStatusCode.Forbidden,
+                            "Nice try! Your session is not recognized in the database.");       
+                }
+
+                // reuse session userId and username for access token generation
+                PayloadModel payload = token.GetPayload();
+                string accessToken = await new Session(payload.UserId, payload.UserId)
+                                        .TokenHandlerAsync(SessionType.ACCESS);
+
+
+                var response = Request.CreateResponse(HttpStatusCode.OK, "Access token is granted.");
+
+                var cookie = new CookieHeaderValue("access_token", accessToken)
+                {
+                    Domain = Request.RequestUri.Host,
+                    Path = "/",
+                    Expires = Expiration.SHORT,
+                    HttpOnly = true,
+                    Secure = true
+                };
+                response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+
+                return ResponseMessage(response);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.InnerException);
                 return InternalServerError();
             }
         }
