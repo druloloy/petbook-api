@@ -20,14 +20,25 @@ namespace PetBookAPI.Extras
         SESSION = 0,
         ACCESS = 1
     }
+
+
     public class Session
     {
         private Environment env = new Environment();
         private string SessionKey;
         private string AccessKey;
         private string Issuer;
+        private string Audience;
         private string UserId;
         private string Username;
+
+        public Session()
+        {
+            this.SessionKey = env.Key("JWT_SESSION_TOKEN");
+            this.AccessKey = env.Key("JWT_ACCESS_TOKEN");
+            this.Issuer = env.Key("JWT_ISSUER");
+            this.Audience = env.Key("JWT_AUDIENCE");
+        }
 
         public Session(string id, string username)
         {
@@ -37,6 +48,7 @@ namespace PetBookAPI.Extras
             this.SessionKey = env.Key("JWT_SESSION_TOKEN");
             this.AccessKey = env.Key("JWT_ACCESS_TOKEN");
             this.Issuer = env.Key("JWT_ISSUER");
+            this.Audience = env.Key("JWT_AUDIENCE");
             this.UserId = id;
             this.Username = username;
         }
@@ -52,8 +64,9 @@ namespace PetBookAPI.Extras
             {
                 var claims = new List<Claim>();
 
-                claims.Add(new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Jti, 
-                    Guid.NewGuid().ToString()));
+                claims.Add(new Claim(Microsoft.IdentityModel.JsonWebTokens
+                                    .JwtRegisteredClaimNames.Jti, 
+                                    Guid.NewGuid().ToString()));
                 claims.Add(new Claim("userId", this.UserId));
                 claims.Add(new Claim("username", this.UserId));
                 return claims;
@@ -71,13 +84,14 @@ namespace PetBookAPI.Extras
                 try
                 {
                     var claims = CreateClaim();
-                    var signingCredentials = Credentials(type == 0 ? this.SessionKey : this.AccessKey);
-                    var expiration = type == 0 ? Expiration.MONTH : Expiration.SHORT;
+                    var signingCredentials = Credentials(type == 0 ? 
+                        this.SessionKey : this.AccessKey);
+                    var expires = type == 0 ? Expiration.MONTH : Expiration.SHORT;
                     var token = new JwtSecurityToken(
                             Issuer,
-                            Issuer,
+                            Audience,
                             claims,
-                            expires: expiration,
+                            expires: expires,
                             signingCredentials: signingCredentials
                         );
                     return token;
@@ -105,11 +119,10 @@ namespace PetBookAPI.Extras
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = env.Key("JWT_ISSUER"),
-                ValidAudience = env.Key("JWT_AUDIENCE"),
+                ValidIssuer = this.Issuer,
+                ValidAudience = this.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(
-                        env.Key("JWT_SESSION_TOKEN")))
+                    Encoding.UTF8.GetBytes(this.SessionKey))
             };
         }
         public async Task<bool> ValidateSessionToken(string token)
