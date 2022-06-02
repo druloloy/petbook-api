@@ -31,7 +31,7 @@ namespace PetBookAPI.Controllers
 
             try
             {
-                using (PetBookEntities db = new PetBookEntities())
+                using (MainDbEntities db = new MainDbEntities())
                 {
                     bool userExists = await db.account_credential
                                     .AnyAsync(u => u.Username.Equals(newAcc.Username) || u.Email.Equals(newAcc.Email));
@@ -122,11 +122,10 @@ namespace PetBookAPI.Controllers
             string sessionId = "", accessToken = "", sessionToken = "";
             Session session = null;
             UID uid = new UID(IdSize.SHORT);
-            
 
             try
             {
-                using (PetBookEntities db = new PetBookEntities())
+                using (MainDbEntities db = new MainDbEntities())
                 {
                     user = await db.account_credential
                              .FirstOrDefaultAsync(u => u.Username.Equals(userLogin.Username));
@@ -154,10 +153,10 @@ namespace PetBookAPI.Controllers
                         ExpiresAt = DateTime.Now.AddDays(30)
                     };
 
-
                     user.login_sessions.Add(loginSession);
                     await db.SaveChangesAsync();
 
+                    var headers = Request.Headers;
                     var response = Request.CreateResponse(HttpStatusCode.OK, new
                     {
                         userId = user.Id,

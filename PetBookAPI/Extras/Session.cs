@@ -11,6 +11,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using PetBookAPI.Models;
+using System.Security.Principal;
 
 namespace PetBookAPI.Extras
 {
@@ -93,6 +94,42 @@ namespace PetBookAPI.Extras
             return await Task.Run(async () => {
                 SecurityToken token = await TokenizeAsync(type);
                 return new JwtSecurityTokenHandler().WriteToken(token);
+            });
+        }
+
+        public TokenValidationParameters CreateValidationParameters()
+        {
+            return new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = env.Key("JWT_ISSUER"),
+                ValidAudience = env.Key("JWT_AUDIENCE"),
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(
+                        env.Key("JWT_SESSION_TOKEN")))
+            };
+        }
+        public async Task<bool> ValidateSessionToken(string token)
+        {
+
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                    var validationParams = CreateValidationParameters();
+
+                    SecurityToken validatedToken;
+                    IPrincipal principal = tokenHandler.ValidateToken(token, validationParams, out validatedToken);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             });
         }
     }

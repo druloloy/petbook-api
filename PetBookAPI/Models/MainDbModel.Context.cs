@@ -13,10 +13,10 @@ namespace PetBookAPI.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class PetBookEntities : DbContext
+    public partial class MainDbEntities : DbContext
     {
-        public PetBookEntities()
-            : base("name=PetBookEntities")
+        public MainDbEntities()
+            : base("name=MainDbEntities")
         {
         }
     
@@ -26,6 +26,10 @@ namespace PetBookAPI.Models
         }
     
         public virtual DbSet<account_credential> account_credential { get; set; }
+        public virtual DbSet<address_details> address_details { get; set; }
+        public virtual DbSet<clinic_profile> clinic_profile { get; set; }
+        public virtual DbSet<contact_numbers> contact_numbers { get; set; }
         public virtual DbSet<login_sessions> login_sessions { get; set; }
+        public virtual DbSet<owner_profile> owner_profile { get; set; }
     }
 }

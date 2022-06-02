@@ -12,22 +12,22 @@ namespace PetBookAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class account_credential
+    public partial class address_details
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public account_credential()
+        public address_details()
         {
-            this.login_sessions = new HashSet<login_sessions>();
+            this.clinic_profile = new HashSet<clinic_profile>();
         }
     
         public string Id { get; set; }
-        public string Email { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public int AccountTypeId { get; set; }
-        public bool IsArchived { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
+        public string Barangay { get; set; }
+        public string Line { get; set; }
     
+        public virtual owner_profile owner_profile { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<login_sessions> login_sessions { get; set; }
+        public virtual ICollection<clinic_profile> clinic_profile { get; set; }
     }
 }
