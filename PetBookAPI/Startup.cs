@@ -25,8 +25,6 @@ namespace PetBookAPI
                     {
                         ValidateIssuer = true,
                         ValidateAudience = true,
-                        ValidateLifetime = true,
-                        RequireExpirationTime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = env.Key("JWT_ISSUER"), 
                         ValidAudience = env.Key("JWT_AUDIENCE"),

@@ -211,6 +211,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
+    <Compile Include="Controllers\OwnerProfileController.cs" />
     <Compile Include="Extras\Environment.cs" />
     <Compile Include="Extras\Expiration.cs" />
     <Compile Include="Extras\Extensions\HttpRequestHeaders\HttpRequestHeadersExtensions.cs" />
