@@ -17,7 +17,7 @@ namespace PetBookAPI.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public owner_profile()
         {
-            this.contact_numbers = new HashSet<contact_numbers>();
+            this.owner_contact = new HashSet<owner_contact>();
         }
     
         public string Id { get; set; }
@@ -27,6 +27,6 @@ namespace PetBookAPI.Models
     
         public virtual address_details address_details { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<contact_numbers> contact_numbers { get; set; }
+        public virtual ICollection<owner_contact> owner_contact { get; set; }
     }
 }

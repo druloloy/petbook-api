@@ -12,15 +12,12 @@ namespace PetBookAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class address_details
+    public partial class owner_contact
     {
         public string Id { get; set; }
-        public string Country { get; set; }
-        public string City { get; set; }
-        public string Barangay { get; set; }
-        public string Line { get; set; }
+        public string UserId { get; set; }
+        public string Contact { get; set; }
     
         public virtual owner_profile owner_profile { get; set; }
-        public virtual clinic_profile clinic_profile { get; set; }
     }
 }

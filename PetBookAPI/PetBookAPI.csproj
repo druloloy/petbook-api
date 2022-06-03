@@ -224,17 +224,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Extras\Extensions\JwtSecurity\PayloadModel.cs" />
     <Compile Include="Models\account_credential.cs">
       <DependentUpon>MainDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\address_details.cs">
       <DependentUpon>MainDbModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Extras\Extensions\JwtSecurity\PayloadModel.cs" />
-    <Compile Include="Models\clinic_profile.cs">
+    <Compile Include="Models\clinic_contact.cs">
       <DependentUpon>MainDbModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\contact_numbers.cs">
+    <Compile Include="Models\clinic_profile.cs">
       <DependentUpon>MainDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\login_sessions.cs">
@@ -257,6 +257,9 @@
     </Compile>
     <Compile Include="Models\Body\LoginModel.cs" />
     <Compile Include="Models\Body\OwnerInformationModel.cs" />
+    <Compile Include="Models\owner_contact.cs">
+      <DependentUpon>MainDbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\owner_profile.cs">
       <DependentUpon>MainDbModel.tt</DependentUpon>
     </Compile>

@@ -17,18 +17,17 @@ namespace PetBookAPI.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public clinic_profile()
         {
-            this.contact_numbers = new HashSet<contact_numbers>();
+            this.clinic_contact = new HashSet<clinic_contact>();
         }
     
         public string Id { get; set; }
         public string Name { get; set; }
-        public string AddressId { get; set; }
         public string VetFirstName { get; set; }
         public string VetMiddleName { get; set; }
         public string VetLastName { get; set; }
     
         public virtual address_details address_details { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<contact_numbers> contact_numbers { get; set; }
+        public virtual ICollection<clinic_contact> clinic_contact { get; set; }
     }
 }
