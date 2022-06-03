@@ -68,7 +68,7 @@ namespace PetBookAPI.Extras
                                     .JwtRegisteredClaimNames.Jti, 
                                     Guid.NewGuid().ToString()));
                 claims.Add(new Claim("userId", this.UserId));
-                claims.Add(new Claim("username", this.UserId));
+                claims.Add(new Claim("username", this.Username));
                 return claims;
             }
             catch (Exception e)

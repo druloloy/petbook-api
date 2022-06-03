@@ -69,7 +69,6 @@ namespace PetBookAPI.Controllers
                     db.account_credential.Add(newAcc);
                     await db.SaveChangesAsync();
 
-
                     var response = Request.CreateResponse(HttpStatusCode.Created, new
                     {
                         userId = newAcc.Id,
@@ -261,8 +260,9 @@ namespace PetBookAPI.Controllers
                 }
 
                 // reuse session userId and username for access token generation
-                PayloadModel payload = token.GetPayload();
-                string accessToken = await new Session(payload.UserId, payload.UserId)
+                PayloadModel payload = await token.GetPayloadAsync();
+              
+                string accessToken = await new Session(payload.UserId, payload.Username)
                                         .TokenHandlerAsync(SessionType.ACCESS);
 
 
