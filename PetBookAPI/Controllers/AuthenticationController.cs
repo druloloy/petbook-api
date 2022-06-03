@@ -286,5 +286,55 @@ namespace PetBookAPI.Controllers
                 return InternalServerError();
             }
         }
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("dev/refresh")]
+        public async Task<IHttpActionResult> GetAccessTokenDevMode()
+        {
+            try
+            {
+                var headers = Request.Headers;
+                // check if session header exists
+                if (!headers.HasSessionTokenHeader())
+                    return Content(HttpStatusCode.Forbidden, "You have no right for this request.");
+                // check if session is valid
+                JwtToken token = new JwtToken(headers.GetSessionToken(),
+                                        new Session().CreateValidationParameters());
+                if (token == null)
+                    return Content(HttpStatusCode.Forbidden, "Invalid session token.");
+                // check if session is in database
+                using (MainDbEntities db = new MainDbEntities())
+                {
+                    var session = db.login_sessions
+                                    .Where(s => s.Token.Equals(token.Value))
+                                    .First();
+
+                    if (session == null)
+                        return Content(HttpStatusCode.Forbidden,
+                            "Nice try! Your session is not recognized in the database.");
+                }
+
+                // reuse session userId and username for access token generation
+                PayloadModel payload = await token.GetPayloadAsync();
+
+                string accessToken = await new Session(payload.UserId, payload.Username)
+                                        .TokenHandlerAsync(SessionType.ACCESS);
+
+
+                var response = Request.CreateResponse(HttpStatusCode.OK, new {
+                    token = accessToken
+                });
+                
+
+                return ResponseMessage(response);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.InnerException);
+                return InternalServerError();
+            }
+        }
     }
 }

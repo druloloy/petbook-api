@@ -231,6 +231,17 @@
     <Compile Include="Models\address_details.cs">
       <DependentUpon>MainDbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Body\AddressModel.cs" />
+    <Compile Include="Models\Body\ContactModel.cs" />
+    <Compile Include="Models\Body\EmailModel.cs" />
+    <Compile Include="Models\Body\FullNameModel.cs" />
+    <Compile Include="Models\Body\Interfaces\IAddressModel.cs" />
+    <Compile Include="Models\Body\Interfaces\IContactModel.cs" />
+    <Compile Include="Models\Body\Interfaces\IEmailModel.cs" />
+    <Compile Include="Models\Body\Interfaces\IFullNameModel.cs" />
+    <Compile Include="Models\Body\Interfaces\IOwnerInformationModel.cs" />
+    <Compile Include="Models\Body\Interfaces\IPasswordModel.cs" />
+    <Compile Include="Models\Body\PasswordModel.cs" />
     <Compile Include="Models\clinic_contact.cs">
       <DependentUpon>MainDbModel.tt</DependentUpon>
     </Compile>
