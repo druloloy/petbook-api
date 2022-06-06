@@ -17,12 +17,13 @@ using System.Web.Http;
 
 namespace PetBookAPI.Controllers
 {
-    public class OwnerProfileController : ApiController
+    public class ClinicProfileController : ApiController
     {
+
         [Authorize]
         [HttpPost]
-        [Route("user/owner")]
-        public async Task<IHttpActionResult> AddOwnerInformation(OwnerInformationModel ownerInput)
+        [Route("user/clinic")]
+        public async Task<IHttpActionResult> AddClinicInformation(ClinicInformationModel clinicInput)
         {
             try
             {
@@ -31,34 +32,34 @@ namespace PetBookAPI.Controllers
 
                 using (MainDbEntities db = new MainDbEntities())
                 {
-                    owner_contact contactNumber = new owner_contact()
+                    clinic_contact contactNumber = new clinic_contact()
                     {
                         Id = await new UID(IdSize.SHORT).GenerateIdAsync(),
-                        UserId = userId,
-                        Contact = ownerInput.Contact
+                        ClinicId = userId,
+                        Contact = clinicInput.Contact
                     };
 
                     address_details address = new address_details()
                     {
                         Id = userId,
-                        Line = ownerInput.Line,
-                        Barangay = ownerInput.Barangay,
-                        City = ownerInput.City,
-                        Country = ownerInput.Country
+                        Line = clinicInput.Line,
+                        Barangay = clinicInput.Barangay,
+                        City = clinicInput.City,
+                        Country = clinicInput.Country
                     };
-                    owner_profile profile = new owner_profile()
+                    clinic_profile profile = new clinic_profile()
                     {
                         Id = userId,
-                        FirstName = ownerInput.FirstName,
-                        MiddleName = ownerInput.MiddleName,
-                        LastName = ownerInput.LastName,
+                        VetFirstName = clinicInput.FirstName,
+                        VetMiddleName = clinicInput.MiddleName,
+                        VetLastName = clinicInput.LastName,
                         address_details = address
                     };
-                    profile.owner_contact.Add(contactNumber);
+                    profile.clinic_contact.Add(contactNumber);
 
-                    db.owner_profile.Add(profile);
+                    db.clinic_profile.Add(profile);
                     await db.SaveChangesAsync();
-                    
+
                 }
                 return Content(HttpStatusCode.Created, "Profile created!");
             }
@@ -98,8 +99,8 @@ namespace PetBookAPI.Controllers
 
         [Authorize]
         [HttpPut]
-        [Route("user/owner")]
-        public async Task<IHttpActionResult> UpdateOwner(OwnerInformationModel infoModel, string update)
+        [Route("user/clinic")]
+        public async Task<IHttpActionResult> UpdateClinic(ClinicInformationModel infoModel, [FromUri] string update)
         {
             try
             {
@@ -108,13 +109,14 @@ namespace PetBookAPI.Controllers
 
                 using (MainDbEntities db = new MainDbEntities())
                 {
+                    /// updates specific areas using query update
                     switch (update)
                     {
-                        /// updates the basic information
-                        /// in this case, the owner's full name
+                        /// Update basic information like name
+                        /// in this case, we will update veterinarian's name
                         case "basic":
                             {
-                                var profile = db.owner_profile
+                                var profile = db.clinic_profile
                                             .Single(p => p.Id.Equals(userId));
 
                                 if (profile == null) return Content(HttpStatusCode.NotFound, new
@@ -137,14 +139,14 @@ namespace PetBookAPI.Controllers
                                         message = "Empty Last name."
                                     });
 
-                                profile.FirstName = infoModel.FirstName;
-                                profile.MiddleName = infoModel.MiddleName;
-                                profile.LastName = infoModel.LastName;
+                                profile.VetFirstName = infoModel.FirstName;
+                                profile.VetMiddleName = infoModel.MiddleName;
+                                profile.VetLastName = infoModel.LastName;
 
                                 break;
                             }
-                        
-                        /// Update the owner's address
+
+                         /// Update the clinic's address 
                         case "address":
                             {
                                 var address = db.address_details
@@ -165,10 +167,10 @@ namespace PetBookAPI.Controllers
                                     string.IsNullOrEmpty(infoModel.Barangay) ||
                                     string.IsNullOrEmpty(infoModel.City) ||
                                     string.IsNullOrEmpty(infoModel.Country))
-                                        return Content(HttpStatusCode.BadRequest, new
-                                        {
-                                            message = "Incomplete Address."
-                                        });
+                                    return Content(HttpStatusCode.BadRequest, new
+                                    {
+                                        message = "Incomplete Address."
+                                    });
 
                                 address.Line = infoModel.Line;
                                 address.Barangay = infoModel.Barangay;
@@ -177,12 +179,12 @@ namespace PetBookAPI.Controllers
 
                                 break;
                             }
-                        /// update owner's contact number
+                        /// Update the clinic contact number
                         case "contact":
                             {
-                                var contact = db.owner_contact
-                                    .Single(p => p.UserId.Equals(userId));
-
+                                var contact = db.clinic_contact
+                                    .Single(p => p.ClinicId.Equals(userId));
+                                
                                 if (contact == null) return BadRequest();
 
                                 infoModel.Contact = infoModel.Contact.Trim();
@@ -197,7 +199,7 @@ namespace PetBookAPI.Controllers
 
                                 break;
                             }
-                        /// update owner's email
+                        /// Update the clinic's email
                         case "email":
                             {
                                 var credential = db.account_credential
@@ -207,7 +209,8 @@ namespace PetBookAPI.Controllers
                                 credential.Email = infoModel.Email;
                                 break;
                             }
-                        /// update owner's password
+                        
+                        /// update the clinic's password
                         case "password":
                             {
                                 var credential = db.account_credential
@@ -222,7 +225,8 @@ namespace PetBookAPI.Controllers
                                 bool isMatched = await PasswordManager.IsMatchedAsync(infoModel.CurrentPassword, credential.Password);
 
                                 if (!isMatched)
-                                    return Content(HttpStatusCode.BadRequest, new {
+                                    return Content(HttpStatusCode.BadRequest, new
+                                    {
                                         message = "Password is invalid."
                                     });
 

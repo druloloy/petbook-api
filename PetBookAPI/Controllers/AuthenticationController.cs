@@ -3,6 +3,7 @@ using PetBookAPI.Extras;
 using PetBookAPI.Extras.Extensions.HttpRequestHeaders;
 using PetBookAPI.Extras.Extensions.JwtSecurity;
 using PetBookAPI.Extras.Extensions.JwtSecurityTokenExtensions;
+using PetBookAPI.Extras.Extensions.Models;
 using PetBookAPI.Models;
 using PetBookAPI.Models.Body;
 using PetBookAPI.Models.Micro;
@@ -333,6 +334,44 @@ namespace PetBookAPI.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine(e.InnerException);
+                return InternalServerError();
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("auth/archive")]
+        public async Task<IHttpActionResult> ArchiveAccount(LoginModel confirmLogin)  
+        {
+            try
+            {
+                /// 1.) fetch data from db that matches id from token
+                /// 2.) compare passwords
+                /// 3.) if matches, archive account
+                /// 4.) set account to archived
+                /// 
+                ClaimsIdentity identity = User.Identity as ClaimsIdentity;
+                var userId = identity.Claims.First(c => c.Type.Equals("userId")).Value;
+
+                using (MainDbEntities db = new MainDbEntities())
+                {
+                    var userAcc = await db.account_credential.FirstAsync(u=>u.Id.Equals(userId));
+                    if (userAcc == null) return BadRequest();
+
+                    bool isMatch = await PasswordManager.IsMatchedAsync(
+                        confirmLogin.Password, userAcc.Password);
+
+                    if (!isMatch) return BadRequest();
+
+                    userAcc.ArchiveAccount();
+
+                    await db.SaveChangesAsync();
+                }
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
                 return InternalServerError();
             }
         }
